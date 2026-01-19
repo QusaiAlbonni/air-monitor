@@ -1,0 +1,1 @@
+export const MAX_EXECUTION_TIME = 10000
