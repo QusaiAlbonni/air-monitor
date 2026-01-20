@@ -1,0 +1,65 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: air-monitor-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: airmonitor
+      POSTGRES_PASSWORD: airmonitor
+      POSTGRES_DB: airmonitor
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: air-monitor-rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: airmonitor
+      RABBITMQ_DEFAULT_PASS: airmonitor
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+  collector-service:
+    build:
+      context: .
+      dockerfile: apps/collector-service/Dockerfile
+    container_name: collector-service
+    restart: unless-stopped
+    depends_on:
+      - rabbitmq
+    env_file:
+      - .env.collector
+    environment:
+      NODE_ENV: development
+      RABBITMQ: amqp://airmonitor:airmonitor@rabbitmq:5672
+      QUEUE_NAME: alert_queue
+      PORT: "3001"
+      HOST: "0.0.0.0"
+    ports:
+      - "3001:3001"
+
+  processor-service:
+    build:
+      context: .
+      dockerfile: apps/processor-service/Dockerfile
+    container_name: processor-service
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - rabbitmq
+    env_file:
+      - .env.processor
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgres://airmonitor:airmonitor@postgres:5432/airmonitor
+      RABBITMQ: amqp://airmonitor:airmonitor@rabbitmq:5672
+      QUEUE_NAME: alert_queue
+      PORT: "3000"
+      HOST: "0.0.0.0"
+    ports:
+      - "3000:3000"
+
+volumes:
+  postgres_data:
+  rabbitmq_data:
