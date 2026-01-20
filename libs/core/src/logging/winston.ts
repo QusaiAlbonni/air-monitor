@@ -1,3 +1,4 @@
+import { airQualityAlertFormatter } from '@air-monitor/air-quality/logging/formatters/air-quality-alert.formatter';
 import { ConfigService } from '@nestjs/config';
 import {
   WinstonModuleOptions,
@@ -23,6 +24,7 @@ export function createWinstonLogger(
 
   return {
     format: winston.format.combine(
+      airQualityAlertFormatter(),
       winston.format.timestamp(),
       winston.format.json(),
     ),

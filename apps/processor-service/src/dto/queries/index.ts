@@ -1,0 +1,1 @@
+export * from './latest-alert-query.dto';

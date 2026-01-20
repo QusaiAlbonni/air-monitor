@@ -1,11 +1,14 @@
+import { ConfigService } from "@nestjs/config";
 import { RmqOptions, Transport } from "@nestjs/microservices";
 
-export function getRabbitMQTransport(): RmqOptions{
+export function getRabbitMQTransport(configService: ConfigService): RmqOptions {
+  const queueName = configService.get<string>('QUEUE_NAME');
   return {
     transport: Transport.RMQ,
     options: {
-      urls: [process.env.RABBITMQ || 'amqp://localhost:5672'],
-      queue: 'air-quality-queue',
+      noAck: true,
+      urls: [process.env.RABBITMQ!],
+      queue: queueName,
       queueOptions: { durable: true },
     },
   };

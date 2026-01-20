@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Socket.IO Events</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    #events {
+      border: 1px solid #ccc;
+      padding: 10px;
+      height: 300px;
+      overflow-y: auto;
+    }
+    .event {
+      margin-bottom: 8px;
+      padding: 6px;
+      background: #f5f5f5;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .event-name {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>Incoming Socket Events</h2>
+  <div id="events"></div>
+
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+
+  <script>
+    const socket = io('http://localhost:3000');
+
+    const eventsContainer = document.getElementById('events');
+
+    function addEvent(name, data) {
+      const div = document.createElement('div');
+      div.className = 'event';
+
+      div.innerHTML = `
+        <div class="event-name">${name}</div>
+        <pre>${JSON.stringify(data, null, 2)}</pre>
+      `;
+
+      eventsContainer.appendChild(div);
+      eventsContainer.scrollTop = eventsContainer.scrollHeight;
+    }
+
+    socket.on('connect', () => {
+      addEvent('connect', { id: socket.id });
+    });
+
+    socket.on('disconnect', (reason) => {
+      addEvent('disconnect', { reason });
+    });
+    //we should see alert events here
+    socket.onAny((eventName, ...args) => {
+      addEvent(eventName, args.length === 1 ? args[0] : args);
+    });
+  </script>
+</body>
+</html>

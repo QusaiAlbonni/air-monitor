@@ -1,0 +1,1 @@
+export const EVENT_METADATA_KEY = Symbol("event_metadata");

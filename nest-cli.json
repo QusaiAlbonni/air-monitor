@@ -4,6 +4,7 @@
   "root": "apps/processor-service",
   "sourceRoot": "apps/processor-service/src",
   "compilerOptions": {
+    "plugins": ["@nestjs/swagger"],
     "deleteOutDir": true,
     "tsConfigPath": "apps/processor-service/tsconfig.app.json"
   },

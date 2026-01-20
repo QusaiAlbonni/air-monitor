@@ -8,10 +8,6 @@ async function bootstrap() {
   const app = await NestFactory.create(CollectorServiceModule);
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
 
-  app.connectMicroservice<MicroserviceOptions>(getRabbitMQTransport());
-
-  app.setGlobalPrefix('api');
-
   await app.startAllMicroservices();
   console.log('Collector microservice ready to send events to RabbitMQ');
 
