@@ -8,14 +8,14 @@ import { validateOrReject } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
 import { mapToAirQualityAlertPayload } from '@air-monitor/air-quality/logging/mappers/air-quality-event.mapper';
 import { AlertService } from '../services/alert.service';
-import { EventsGateway } from '../gateways/events.gateway';
+import { AlertsGateway } from '../gateways/alerts.gateway';
 
 @Controller()
 export class AlertConsumer {
   constructor(
     @InjectLogger() private readonly logger: Logger,
     private readonly alertService: AlertService,
-    private readonly gateway: EventsGateway
+    private readonly gateway: AlertsGateway
   ) {}
 
   @HandleEvent(AirQualityAlert)

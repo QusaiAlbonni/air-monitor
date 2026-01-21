@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
-import { AlertController } from './controllers/alert.controller';
-import { AlertService } from './services/alert.service';
+import { AlertController } from './alert/controllers/alert.controller';
+import { AlertService } from './alert/services/alert.service';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
 import { CoreModule } from '@air-monitor/core';
-import { AlertConsumer } from './consumers/alert.consumer';
+import { AlertConsumer } from './alert/consumers/alert.consumer';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AlertEntity } from './entities/alert.entity';
+import { AlertEntity } from './alert/entities/alert.entity';
 import { HealthModule } from './health/health.module';
-import { EventsGateway } from './gateways/events.gateway';
+import { AlertsGateway } from './alert/gateways/alerts.gateway';
+import { AlertModule } from './alert/alert.module';
 
 @Module({
   imports: [
@@ -18,10 +19,8 @@ import { EventsGateway } from './gateways/events.gateway';
     }),
     DatabaseModule,
     CoreModule,
-    TypeOrmModule.forFeature([AlertEntity]),
     HealthModule,
+    AlertModule,
   ],
-  controllers: [AlertController, AlertConsumer],
-  providers: [AlertService, EventsGateway],
 })
 export class ProcessorServiceModule {}

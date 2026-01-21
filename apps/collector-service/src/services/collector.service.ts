@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { EventBus } from '@air-monitor/messaging/events/event-bus';
 import { AirQualityAlert } from '@air-monitor/air-quality/events/threshold-passed-alert.event';
-import { ReadingValidator } from '../validators/reading.validator';
+import { ReadingValidator } from '../../../../libs/air-quality/src/validators/reading.validator';
 import { AirQualityReading } from '@air-monitor/air-quality/dto/air-quality-reading.interface';
 
 @Injectable()

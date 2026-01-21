@@ -8,10 +8,10 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { PollAirQualityDataTask } from './tasks';
 import { PlaceService } from './services/place.service';
 import { AirQualityModule } from '@air-monitor/air-quality';
-import { RULES_LIST_TOKEN } from './validators/constants';
-import { AqiRule } from './validators/rules/aqi.rule';
-import { PollutantThresholdRule } from './validators/rules/pollutant.rule';
-import { ReadingValidator } from './validators/reading.validator';
+import { RULES_LIST_TOKEN } from '../../../libs/air-quality/src/validators/constants';
+import { AqiRule } from '../../../libs/air-quality/src/validators/rules/aqi.rule';
+import { PollutantThresholdRule } from '../../../libs/air-quality/src/validators/rules/pollutant.rule';
+import { ReadingValidator } from '../../../libs/air-quality/src/validators/reading.validator';
 import { HealthModule } from './health/health.module';
 
 @Module({
@@ -30,11 +30,6 @@ import { HealthModule } from './health/health.module';
     CollectorService,
     PollAirQualityDataTask,
     PlaceService,
-    ReadingValidator,
-    {
-      provide: RULES_LIST_TOKEN,
-      useValue: [new AqiRule(), new PollutantThresholdRule()],
-    },
   ],
 })
 export class CollectorServiceModule {}

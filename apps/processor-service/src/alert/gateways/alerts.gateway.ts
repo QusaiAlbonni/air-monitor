@@ -12,7 +12,7 @@ import { Server, Socket } from 'socket.io';
     origin: '*'
   }
 })
-export class EventsGateway {
+export class AlertsGateway {
   @WebSocketServer()
   server: Server;
 
