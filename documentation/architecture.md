@@ -52,3 +52,9 @@ Both microservices, plus PostgreSQL and RabbitMQ, run in Docker and communicate 
   - `processor-service` (HTTP + Swagger + WebSockets on `localhost:3000`).
   - `postgres` (database) and `rabbitmq` (message broker), both internal-only.
 - Environment files (`.env.collector` and `.env.processor`) are used mainly for **external API keys**, while most infrastructure settings (ports, database URL, RabbitMQ URL, queue name) are provided via `docker-compose.yml`.
+
+## Notes on Approach
+- Focused on clarity and correctness within the suggested time frame.
+- Used a simple, modular architecture to avoid over-engineering and keep the code readable and maintainable.
+- Skipped automated tests due to the limited time window; in production, tests would be added to ensure reliability.
+- AWS CDK script is included for demonstration purposes only.
