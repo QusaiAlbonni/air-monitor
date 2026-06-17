@@ -4,9 +4,14 @@ import { AirQualityIndex } from '@air-monitor/air-quality/dto';
 import { IsNumber, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Pollutant } from '../dto/pollutant.interface';
+import { NewAirQualityAlertCommandFactory } from '../commands/factories/new-air-alert.command.factory';
+import { IEvent } from '@air-monitor/messaging/events/interfaces/event';
 
-@Event({ name: 'bad_air_alert' })
-export class AirQualityAlert {
+@Event({
+  name: 'bad_air_alert',
+  commandFactory: new NewAirQualityAlertCommandFactory(),
+})
+export class AirQualityAlert implements IEvent {
   @IsString()
   city: string;
 

@@ -4,7 +4,9 @@
   "root": "apps/processor-service",
   "sourceRoot": "apps/processor-service/src",
   "compilerOptions": {
-    "plugins": ["@nestjs/swagger"],
+    "plugins": [
+      "@nestjs/swagger"
+    ],
     "deleteOutDir": true,
     "tsConfigPath": "apps/processor-service/tsconfig.app.json"
   },
@@ -37,6 +39,15 @@
       "sourceRoot": "libs/core/src",
       "compilerOptions": {
         "tsConfigPath": "libs/core/tsconfig.lib.json"
+      }
+    },
+    "database": {
+      "type": "library",
+      "root": "libs/database",
+      "entryFile": "index",
+      "sourceRoot": "libs/database/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/database/tsconfig.lib.json"
       }
     },
     "messaging": {

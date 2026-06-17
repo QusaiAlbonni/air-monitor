@@ -1,7 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { MicroserviceOptions } from '@nestjs/microservices';
 import { CollectorServiceModule } from './collector-service.module';
-import { getRabbitMQTransport } from '@air-monitor/messaging';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 async function bootstrap() {

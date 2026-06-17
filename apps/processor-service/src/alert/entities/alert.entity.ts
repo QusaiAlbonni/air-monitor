@@ -5,6 +5,9 @@ export class AlertEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ unique: true })
+  idempotencyKey: string;
+
   @Column()
   city: string;
 

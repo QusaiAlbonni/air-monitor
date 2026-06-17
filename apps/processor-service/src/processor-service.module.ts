@@ -1,15 +1,14 @@
 import { Module } from '@nestjs/common';
-import { AlertController } from './alert/controllers/alert.controller';
-import { AlertService } from './alert/services/alert.service';
 import { ConfigModule } from '@nestjs/config';
-import { DatabaseModule } from './database/database.module';
 import { CoreModule } from '@air-monitor/core';
-import { AlertConsumer } from './alert/consumers/alert.consumer';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { AlertEntity } from './alert/entities/alert.entity';
 import { HealthModule } from './health/health.module';
-import { AlertsGateway } from './alert/gateways/alerts.gateway';
 import { AlertModule } from './alert/alert.module';
+import { DatabaseModule } from '@app/database';
+import { MessagingModule } from '@air-monitor/messaging';
+import { InboxModule } from './inbox/inbox.module';
+import { CqrsModule } from '@nestjs/cqrs';
+import { ScheduleModule } from '@nestjs/schedule';
+import { NewAirQualityAlertCommandHandler } from './alert/command-handlers/new-air-quality-alert.command-handler';
 
 @Module({
   imports: [
@@ -17,10 +16,14 @@ import { AlertModule } from './alert/alert.module';
       envFilePath: process.env.ENV_FILE || '.env',
       isGlobal: true,
     }),
-    DatabaseModule,
+    DatabaseModule.forRoot(__dirname + '/**/*.entity.{ts,js}'),
     CoreModule,
+    MessagingModule,
+    InboxModule,
     HealthModule,
+    CqrsModule.forRoot(),
     AlertModule,
+    ScheduleModule.forRoot(),
   ],
 })
 export class ProcessorServiceModule {}

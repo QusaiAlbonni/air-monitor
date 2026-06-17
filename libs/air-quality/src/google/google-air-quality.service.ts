@@ -48,7 +48,7 @@ export class GoogleAirQualityService implements AirQualityService {
       });
       throw new Error(
         `Error found during api call: to ${this.baseUrl}, error: ${error} `,
-        error,
+        error as any,
       );
     }
   }

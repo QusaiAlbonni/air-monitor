@@ -1,5 +1,6 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { EventBus } from './event-bus';
+import { Event } from './interfaces/event';
 import { ClientProxy } from '@nestjs/microservices';
 import { COLLECTOR_CLIENT_PROXY_TOKEN } from '../transport';
 import { IEvent } from './interfaces/event';
@@ -17,15 +18,25 @@ export class ProxyEventBus implements EventBus, OnModuleInit {
     this.client.connect();
   }
 
-  publish(event: IEvent | IEvent[]): void {
+  publish<E extends Event<any>>(event: E | E[]): void {
     if (!Array.isArray(event)) {
-      const metadata = this.getEventMetaData(event);
-      this.client.emit(metadata.name, event);
+      let eventName: string | undefined;
+      if (event.type) eventName = event.type;
+      else {
+        const metadata = this.getEventMetaData(event.data);
+        eventName = metadata.name;
+      }
+      this.client.emit(eventName, event);
       return;
     }
-    event.forEach((e: IEvent) => {
-      const metadata = this.getEventMetaData(e);
-      this.client.emit(metadata.name, e);
+    event.forEach((e: Event<any>) => {
+      let eventName: string | undefined;
+      if (e.type) eventName = e.type;
+      else {
+        const metadata = this.getEventMetaData(e.data);
+        eventName = metadata.name;
+      }
+      this.client.emit(eventName, e);
     });
   }
 

@@ -2,25 +2,19 @@ import { Controller, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Payload } from '@nestjs/microservices';
 import { HandleEvent } from '@air-monitor/messaging/events/decorator/handle-event';
 import { AirQualityAlert } from '@air-monitor/air-quality/events/threshold-passed-alert.event';
-import { InjectLogger } from '@air-monitor/core/logging';
-import { Logger } from 'winston';
 import { validateOrReject } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
-import { mapToAirQualityAlertPayload } from '@air-monitor/air-quality/logging/mappers/air-quality-event.mapper';
-import { AlertService } from '../services/alert.service';
-import { AlertsGateway } from '../gateways/alerts.gateway';
+import { Event } from '@air-monitor/messaging/events/interfaces/event';
+import { InboxConsumer } from '../../inbox/inbox.consumer';
+import { InboxStore } from '../../inbox/inbox.store';
 
 @Controller()
 export class AlertConsumer {
-  constructor(
-    @InjectLogger() private readonly logger: Logger,
-    private readonly alertService: AlertService,
-    private readonly gateway: AlertsGateway
-  ) {}
+  constructor(private readonly inboxStore: InboxStore) {}
 
   @HandleEvent(AirQualityAlert)
-  async handleAirQualityEvent(@Payload() data: AirQualityAlert) {
-    const dto = plainToInstance(AirQualityAlert, data);
+  async handleAirQualityEvent(@Payload() data: Event<AirQualityAlert>) {
+    const dto = plainToInstance(AirQualityAlert, data.data);
     try {
       await validateOrReject(dto);
     } catch (errors) {
@@ -28,11 +22,8 @@ export class AlertConsumer {
       return;
     }
     //logs event
-    this.logger.warn('Critical air quality detected', {
-      airQualityPayload: mapToAirQualityAlertPayload(dto),
-    });
-
-    await this.alertService.save(dto);
-    this.gateway.onAlert(dto);
+    this.inboxStore.store([
+      { id: data.id, data: data.data, eventType: data.type },
+    ]);
   }
 }

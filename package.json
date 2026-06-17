@@ -28,6 +28,7 @@
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
+    "@nestjs/cqrs": "^11.0.3",
     "@nestjs/microservices": "^11.1.12",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/platform-socket.io": "^11.1.12",
@@ -103,6 +104,7 @@
     "moduleNameMapper": {
       "^@air-monitor/core(|/.*)$": "<rootDir>/libs/core/src/$1",
       "^@air-monitor/messaging(|/.*)$": "<rootDir>/libs/messaging/src/$1",
+      "^@app/database(|/.*)$": "<rootDir>/libs/database/src/$1",
       "^air-monitor/air-quality(|/.*)$": "<rootDir>/libs/air-quality/src/$1"
     }
   }

@@ -35,6 +35,12 @@
       ],
       "@air-monitor/messaging/*": [
         "libs/messaging/src/*"
+      ],
+      "@app/database": [
+        "libs/database/src"
+      ],
+      "@app/database/*": [
+        "libs/database/src/*"
       ]
     }
   }

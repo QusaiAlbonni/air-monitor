@@ -1,12 +1,10 @@
 import { Global, Module } from '@nestjs/common';
 import { LoggingModule } from './logging/logging.module';
-import { MessagingModule } from '@air-monitor/messaging';
-import { HealthModule } from 'apps/processor-service/src/health/health.module';
 
 @Global()
 @Module({
-  imports: [LoggingModule, MessagingModule],
+  imports: [LoggingModule],
   providers: [],
-  exports: [LoggingModule, MessagingModule],
+  exports: [LoggingModule],
 })
 export class CoreModule {}
